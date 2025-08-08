@@ -7,7 +7,12 @@ on:
       - 'product-service/**'
       - 'docker-compose.yml'
   pull_request:
-
+    paths:
+      - 'supplier-api/**'
+      - 'inventory-api/**'
+      - 'product-service/**'
+      - 'docker-compose.yml'
+  workflow_dispatch:
 jobs:
   build:
     runs-on: ubuntu-latest
