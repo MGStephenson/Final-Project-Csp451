@@ -24,3 +24,23 @@ It demonstrates **containerized microservices**, **cloud-based event-driven func
 ```bash
 # Start all microservices
 docker-compose up --build
+
+☁️ Azure Deployment
+Azure Functions deployed via GitHub Actions CI/CD workflow (functions-ci.yml).
+
+Service Bus used for reorder messaging.
+
+Application Insights integrated into all functions for monitoring.
+
+🔄 CI/CD Workflows
+1. Node Services CI (node-services.yml)
+
+Runs on push/PR to service files.
+
+Installs dependencies and runs tests for all microservices.
+
+2. Azure Functions CI (functions-ci.yml)
+
+Deploys Azure Functions to the cloud.
+
+Triggered manually or on main branch updates.
