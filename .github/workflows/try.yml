@@ -14,11 +14,18 @@ on:
       - 'SmartRetailProject/product-service/**'
       - 'SmartRetailProject/docker-compose.yml'
   workflow_dispatch:
+
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        service: [supplier-api, inventory-api, product-service]
     env:
       SERVICE_BUS_CONNECTION_STRING: ${{ secrets.SERVICE_BUS_CONNECTION_STRING }}
+    defaults:
+      run:
+        working-directory: SmartRetailProject/${{ matrix.service }}
 
     steps:
       - name: Checkout code
@@ -29,23 +36,8 @@ jobs:
         with:
           node-version: '18'
 
-      # supplier-api
-      - name: Install deps (supplier-api)
-        run: npm ci --prefix SmartRetailProject/supplier-api
+      - name: Install dependencies
+        run: npm ci
 
-      - name: Test (supplier-api)
-        run: npm test --prefix SmartRetailProject/supplier-api || echo "no tests"
-
-      # inventory-api
-      - name: Install deps (inventory-api)
-        run: npm ci --prefix SmartRetailProject/inventory-api
-
-      - name: Test (inventory-api)
-        run: npm test --prefix SmartRetailProject/inventory-api || echo "no tests"
-
-      # product-service
-      - name: Install deps (product-service)
-        run: npm ci --prefix SmartRetailProject/product-service
-
-      - name: Test (product-service)
-        run: npm test --prefix SmartRetailProject/product-service || echo "no tests"
+      - name: Run tests
+        run: npm test || echo "no tests"
