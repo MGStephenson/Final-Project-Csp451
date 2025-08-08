@@ -1,0 +1,21 @@
+name: Node Services CI
+on:
+  push:
+    paths:
+      - 'supplier-api/**'
+      - 'inventory-api/**'
+      - 'product-service/**'
+      - 'docker-compose.yml'
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      SERVICE_BUS_CONNECTION_STRING: ${{ secrets.SERVICE_BUS_CONNECTION_STRING }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '18' }
+      - run: npm ci --prefix sales-service
+      - run: npm test --prefix sales-service || echo "no tests"

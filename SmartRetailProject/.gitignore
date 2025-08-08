@@ -1,0 +1,29 @@
+# Node
+node_modules/
+npm-debug.log
+*.log
+
+# VS Code
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build/coverage
+dist/
+coverage/
+
+# Docker
+*.env
+.env*
+**/.env
+
+# Azure Functions (local)
+azure-function-app/local.settings.json
+azure-function-app/bin/
+azure-function-app/obj/
+azure-function-app/.funcignore
+
+# Misc
+*.zip
