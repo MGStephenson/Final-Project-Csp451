@@ -13,7 +13,7 @@ on:
       - 'SmartRetailProject/inventory-api/**'
       - 'SmartRetailProject/product-service/**'
       - 'SmartRetailProject/docker-compose.yml'
-
+  workflow_dispatch:
 jobs:
   build:
     runs-on: ubuntu-latest
