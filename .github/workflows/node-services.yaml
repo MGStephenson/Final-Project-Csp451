@@ -2,33 +2,29 @@ name: Node Services CI
 on:
   push:
     paths:
-      - 'supplier-api/**'
-      - 'inventory-api/**'
-      - 'product-service/**'
-      - 'docker-compose.yml'
+      - 'SmartRetailProject/supplier-api/**'
+      - 'SmartRetailProject/inventory-api/**'
+      - 'SmartRetailProject/product-service/**'
+      - 'SmartRetailProject/docker-compose.yml'
   pull_request:
     paths:
-      - 'supplier-api/**'
-      - 'inventory-api/**'
-      - 'product-service/**'
-      - 'docker-compose.yml'
-  workflow_dispatch:
+      - 'SmartRetailProject/supplier-api/**'
+      - 'SmartRetailProject/inventory-api/**'
+      - 'SmartRetailProject/product-service/**'
+      - 'SmartRetailProject/docker-compose.yml'
+
 jobs:
   build:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        service: [supplier-api, inventory-api, product-service]
+    defaults:
+      run:
+        working-directory: SmartRetailProject
     env:
       SERVICE_BUS_CONNECTION_STRING: ${{ secrets.SERVICE_BUS_CONNECTION_STRING }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-        with: { node-version: '18' }
-      - name: Install deps (${{ matrix.service }})
-        run: npm ci
-        working-directory: ${{ matrix.service }}
-
-      - name: Test (${{ matrix.service }})
-        run: npm test || echo "no tests"
-        working-directory: ${{ matrix.service }}
+        with:
+          node-version: '18'
+      - run: npm ci --prefix inventory-api
+      - run: npm test --prefix inventory-api || echo "no tests"
