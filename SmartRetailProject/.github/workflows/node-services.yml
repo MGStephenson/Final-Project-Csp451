@@ -7,15 +7,28 @@ on:
       - 'product-service/**'
       - 'docker-compose.yml'
   pull_request:
-
+    paths:
+      - 'supplier-api/**'
+      - 'inventory-api/**'
+      - 'product-service/**'
+      - 'docker-compose.yml'
+  workflow_dispatch:
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        service: [supplier-api, inventory-api, product-service]
     env:
       SERVICE_BUS_CONNECTION_STRING: ${{ secrets.SERVICE_BUS_CONNECTION_STRING }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with: { node-version: '18' }
-      - run: npm ci --prefix sales-service
-      - run: npm test --prefix sales-service || echo "no tests"
+      - name: Install deps (${{ matrix.service }})
+        run: npm ci
+        working-directory: ${{ matrix.service }}
+
+      - name: Test (${{ matrix.service }})
+        run: npm test || echo "no tests"
+        working-directory: ${{ matrix.service }}
