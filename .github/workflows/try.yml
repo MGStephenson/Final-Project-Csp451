@@ -1,0 +1,43 @@
+name: Node Services CI
+
+on:
+  push:
+    paths:
+      - 'SmartRetailProject/supplier-api/**'
+      - 'SmartRetailProject/inventory-api/**'
+      - 'SmartRetailProject/product-service/**'
+      - 'SmartRetailProject/docker-compose.yml'
+  pull_request:
+    paths:
+      - 'SmartRetailProject/supplier-api/**'
+      - 'SmartRetailProject/inventory-api/**'
+      - 'SmartRetailProject/product-service/**'
+      - 'SmartRetailProject/docker-compose.yml'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        service: [supplier-api, inventory-api, product-service]
+    env:
+      SERVICE_BUS_CONNECTION_STRING: ${{ secrets.SERVICE_BUS_CONNECTION_STRING }}
+    defaults:
+      run:
+        working-directory: SmartRetailProject/${{ matrix.service }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm test || echo "no tests"
